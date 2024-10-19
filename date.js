@@ -6,98 +6,113 @@ const { hideBin } = require('yargs/helpers');
 const argv = yargs(hideBin(process.argv))
   .command({
     command: 'current',
-    describe: 'Получает год, месяц или дату',
+    describe: 'Текущая дата и время',
     builder: (yargs) => {
       yargs
         .option('year', {
           alias: 'y',
           describe: 'Текущий год',
-          type: 'number',
+          type: 'boolean',
         })
         .option('month', {
           alias: 'm',
           describe: 'Текущий месяц',
-          type: 'number',
+          type: 'boolean',
         })
         .option('date', {
           alias: 'd',
-          describe: 'Текущая дата',
-          type: 'number',
+          describe: 'Дата в календарном месяце',
+          type: 'boolean',
         });
     },
     handler: (argv) => {
       if (argv.year) {
-        console.log(new Date().getFullYear());
+        console.log(`Текущий год: ${new Date().getFullYear()}`);
       } else if (argv.month) {
-        console.log(new Date().getMonth() + 1);
+        console.log(`Текущий месяц: ${new Date().getMonth() + 1}`);
       } else if (argv.date) {
-        console.log(new Date().getDate());
+        console.log(`Дата в календарном месяце: ${new Date().getDate()}`);
+      } else {
+        console.log(`Текущая дата и время в формате ISO: ${new Date().toISOString()}`);
       }
     },
   })
   .command({
     command: 'add',
-    describe: 'Получает год, месяц или дату в будущем',
+    describe: 'Добавляем указанное время',
     builder: (yargs) => {
       yargs
         .option('year', {
           alias: 'y',
-          describe: 'Прибавляет год',
+          describe: 'Прибавляем указанное количество лет',
           type: 'number',
         })
         .option('month', {
           alias: 'm',
-          describe: 'Прибавляет месяц',
+          describe: 'Прибавляем указанное количество месяцев',
           type: 'number',
         })
         .option('date', {
           alias: 'd',
-          describe: 'Прибавляет дату',
+          describe: 'Прибавляем указанное количество дней',
           type: 'number',
         });
     },
+
     handler: (argv) => {
+      const test = new Date();
       if (argv.year) {
-        console.log(new Date().getFullYear() + argv.year);
+        const year = new Date().getFullYear();
+        const yearAdd = year + argv.year;
+        console.log(`Вы прибавили к текущему ${year} году ${argv.year}, Результат: Текущий год: ${yearAdd}.`);
       } else if (argv.month) {
-        console.log(new Date().getMonth() + 1 + argv.month);
+        const month = new Date().getMonth() + 1;
+        const monthAdd = month + argv.month;
+        console.log(`Вы прибавили к текущему ${month} месяцу ${argv.month}, Результат: Текущий месяц: ${monthAdd}.`);
       } else if (argv.date) {
-        console.log(new Date().getDate() + argv.date);
+        new Date().setDate(new Date().getDate() + argv.date);
+        const date = new Date().getDate();
+        const dateAdd = date + argv.date;
+        console.log(`Вы прибавили к текущей ${date} дате ${argv.date}, Результат: Текущая дата: ${dateAdd}.`);
       }
     },
   })
   .command({
     command: 'sub',
-    describe: 'Получает год, месяц или дату в прошлом',
+    describe: 'Вычитаем указанное время',
     builder: (yargs) => {
       yargs
         .option('year', {
           alias: 'y',
-          describe: 'Отнимает год',
+          describe: 'Вычитаем указанное количество лет',
           type: 'number',
         })
         .option('month', {
           alias: 'm',
-          describe: 'Отнимает месяц',
+          describe: 'Вычитаем указанное количество месяцев',
           type: 'number',
         })
         .option('date', {
           alias: 'd',
-          describe: 'Отнимает дату',
+          describe: 'Вычитаем указанное количество дней',
           type: 'number',
         });
     },
+
     handler: (argv) => {
       if (argv.year) {
-        console.log(new Date().getFullYear() - argv.year);
+        const year = new Date().getFullYear();
+        const yearAdd = year - argv.year;
+        console.log(`Вы вычли из текущего ${year} года ${argv.year}, Результат: Текущий год: ${yearAdd}.`);
       } else if (argv.month) {
-        console.log(new Date().getMonth() + 1 - argv.month);
+        const month = new Date().getMonth() + 1;
+        const monthAdd = month - argv.month;
+        console.log(`Вы вычли из текущего ${month} месяца ${argv.month}, Результат: Текущий месяц: ${monthAdd}.`);
       } else if (argv.date) {
-        console.log(new Date().getDate() - argv.date);
+        new Date().setDate(new Date().getDate() + argv.date);
+        const date = new Date().getDate();
+        const dateAdd = date - argv.date;
+        console.log(`Вы вычли из текущей ${date} даты ${argv.date}, Результат: Текущая дата: ${dateAdd}.`);
       }
     },
   }).argv;
-
-
-
-// Не выводятся текущие года, месяца и даты, хотя будущие и прошлые выводятся спокойно. Необходимо ли учитывать то что почти в каждом месяце 30/31 день и то что в году 12 месяцев?
